@@ -14,7 +14,7 @@ packages = [
 python = "^3.8"
 pysigma = "^0.11.14"
 black = "^24.3.0"
-pysigma-backend-duckdb = {path = "/Users/whitehurst1/gitlab/another-gitlab/another-another-gitlab/pySigma-backend-duckdb"}
+pysigma-backend-duckdb = {git = "https://github.com/LLNL/pySigma-backend-duckdb.git", rev = "lindseyw-initial-commit"}
 
 [tool.poetry.dev-dependencies]
 

@@ -532,8 +532,10 @@ black = "^24.3.0"
 pysigma = "^0.11.14"
 
 [package.source]
-type = "directory"
-url = "../another-another-gitlab/pySigma-backend-duckdb"
+type = "git"
+url = "https://github.com/LLNL/pySigma-backend-duckdb.git"
+reference = "lindseyw-initial-commit"
+resolved_reference = "56684d2ad3c14b6c8bdf074fbd0bc7f3f5a4d9fa"
 
 [[package]]
 name = "pytest"
@@ -700,4 +702,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "4928c521e2221ec48577a851af61f18f0a87b431e72bcdfbf7dace5c8872ae9d"
+content-hash = "c4c7432cea3d95f41d2beed1c34a987c1dc4f47c8fad305cfccf94822a5c5e03"
