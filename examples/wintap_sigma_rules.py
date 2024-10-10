@@ -163,7 +163,7 @@ def main(argv=None):
     )
     parser.add_argument(
         "-d",
-        "--data-set-path", 
+        "--data-set-path",
         help="Path to the dataset",
         required=True,
     )
