@@ -18,9 +18,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Poetry
-        run:  pipx install poetry 
-      - name: uninstall pysigma
-        run: pipx uninstall pysigma
+        run:  pipx install poetry
       - name: Debug Poetry
         run: poetry show --tree
       - name: Install dependencies
