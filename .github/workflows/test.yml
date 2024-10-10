@@ -20,10 +20,12 @@ jobs:
       - name: Install Poetry
         run:  pipx install poetry 
       - name: uninstall pysigma
-        run: pipx uninstall pysigma -y
+        run: pipx uninstall pysigma
       - name: Debug Poetry
         run: poetry show --tree
       - name: Install dependencies
         run: poetry install
+      - name: Run lint
+        run: poetry run black --check . &&  poetry run isort --check-only .
       - name: Run tests
         run: poetry run pytest -vv
