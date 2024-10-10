@@ -15,6 +15,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Poetry
         run:  pipx install poetry
+      # Note: If the setup-python version does not match the version specified in pyproject.toml and 
+      # python version in pyproject.toml is less than the runner's python version, poetry install 
+      # will default to using the runner's Python version.
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
