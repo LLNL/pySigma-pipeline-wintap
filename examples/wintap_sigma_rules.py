@@ -25,7 +25,7 @@ from sigma.pipelines.wintap.wintap import wintap_pipeline
 SIGMA_RULES_PATH = "sigma_rules"
 VIEW_CREATION_QUERIES = [
     """
-    create or replace view joined_process as
+    create or replace table joined_process as
     select p.*, pp.args as parent_command_line, pp.process_name as parent_process_name,
     [p.file_md5, p.file_sha2] as hashes
     from process as p
@@ -39,13 +39,13 @@ VIEW_CREATION_QUERIES = [
     join process p on i.pid_hash=p.pid_hash and i.daypk=p.daypk
     """,
     """
-    create or replace view sigma_process_registry as
+    create or replace table sigma_process_registry as
     select p.process_path, r.*
     from process_registry as r
     join process as p on r.pid_hash=p.pid_hash and r.daypk=p.daypk
     """,
     """
-    create or replace view sigma_process_net_conn as
+    create or replace table sigma_process_net_conn as
     select p.process_path, pnc.*
     from process_net_conn as pnc
     join process as p on pnc.pid_hash=p.pid_hash and pnc.daypk=p.daypk
@@ -70,6 +70,7 @@ def wintap_setup(data_set_path: str) -> WintapDuckDB:
     options = WintapDuckDBOptions(con, data_set_path, False)
     db = WintapDuckDB(options)
     for view in VIEW_CREATION_QUERIES:
+        logging.info(f"  Executing: {view}")
         db.query(view)
     return db
 
@@ -182,21 +183,26 @@ def main(argv=None):
         Path(SIGMA_RULES_PATH).mkdir(exist_ok=True)
 
     # Create the pipeline resolver
+    logging.info("Configuring pipeline")
     piperesolver = ProcessingPipelineResolver()
     piperesolver.add_pipeline_class(wintap_pipeline())
     combined_pipeline = piperesolver.resolve(piperesolver.pipelines)
     duckdb_backend = DuckDBBackend(combined_pipeline, collect_errors=True)
 
     # Load Sigma rules
+    logging.info("Loading SIGMA rules")
     rules = SigmaCollection.load_ruleset([args.sigma_input_rules_path], collect_errors=True)
 
     # Setup Wintap database
+    logging.info("Opening database")
     wintap_db = wintap_setup(args.data_set_path)
 
     # Format rules and queries
+    logging.info("Formatting rules")
     _, queries = format_rules(rules, duckdb_backend)
 
     # Define date range for processing
+    logging.info("Calculating date range to process")
     start_date, end_date = date_range(args.data_set_path)
     env = Environment(loader=BaseLoader)
 

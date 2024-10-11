@@ -23,7 +23,7 @@ See the examples directory for ways to use the pipeline with your wintap dataset
 > This pipeline will create queries for views not in the default wintap output. These views can be created using the following:
 
 ```sql
-create or replace view joined_process as
+create or replace table joined_process as
 select p.*, pp.args as parent_command_line, pp.process_name as parent_process_name,
 [p.file_md5, p.file_sha2] as hashes
 from process as p
@@ -39,14 +39,14 @@ join process p on i.pid_hash=p.pid_hash and i.daypk=p.daypk
 ```
 
 ```sql
-create or replace view sigma_process_registry as
+create or replace table sigma_process_registry as
 select p.process_path, r.*
 from process_registry as r
 join process as p on r.pid_hash=p.pid_hash and r.daypk=p.daypk
 ```
 
 ```sql
-create or replace view sigma_process_net_conn as
+create or replace table sigma_process_net_conn as
 select p.process_path, pnc.*
 from process_net_conn as pnc
 join process as p on pnc.pid_hash=p.pid_hash and pnc.daypk=p.daypk
